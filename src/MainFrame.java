@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.Random;
 
 public class MainFrame extends JFrame {
@@ -21,8 +24,7 @@ public class MainFrame extends JFrame {
     private JMenuItem jmiLoto = new JMenuItem("Loto");
     private JDesktopPane jdp = new JDesktopPane();
 
-//20171031--------------------------------------------------------------------------------------------------------------
-
+//20171031 Add Font-----------------------------------------------------------------------------------------------------
     private JMenuItem jmiSetFont = new JMenuItem("Font");
     private JPanel jpanel1 = new JPanel(new GridLayout(2,3,5,5));
     private JLabel jlbFontFamily =new JLabel("Family");
@@ -34,7 +36,19 @@ public class MainFrame extends JFrame {
     private String[] options = {"PLAIN","BOLD","ITALIC","BOLD+ITALIC"};
     private JComboBox jcbFStyle = new JComboBox(options);
 
-//----------------------------------------------------------------------------------------------------------------------
+//20171031 Add Category-------------------------------------------------------------------------------------------------
+    private JInternalFrame jIFAddCategory = new JInternalFrame();
+    private Container jIFAddCategorycp;
+    private JMenuBar jIFAddCatrgoryJmb = new JMenuBar();
+    private JMenu jmDate = new JMenu("Date");
+    private JMenuItem jmiDateLoad = new JMenu("Load");
+    private JMenuItem jmiDateNew = new JMenu("New");
+    private JMenuItem jmiDateClose = new JMenu("Close");
+    private JFileChooser jfc = new JFileChooser();
+    private JTextArea jta = new JTextArea();
+    private JScrollPane jsp1 = new JScrollPane();
+    private JMenuItem jmiAddBook = new JMenuItem("Book");
+    private JMenuItem jmiAddCategory = new JMenuItem("Category");
 
     private JInternalFrame jInternalFrame = new JInternalFrame();
     private Container jifCP;
@@ -58,7 +72,7 @@ public class MainFrame extends JFrame {
         this.setJMenuBar(jmb);
         this.setContentPane(jdp);
 
- //20171031-------------------------------------------------------------------------------------------------------------
+ //20171031 Add Font-------------------------------------------------------------------------------------------------------------
 
         jmSet.add(jmiSetFont);
 
@@ -102,7 +116,47 @@ public class MainFrame extends JFrame {
             }
         });
 
-//----------------------------------------------------------------------------------------------------------------------
+//20171031 Add Category-------------------------------------------------------------------------------------------------
+       jmFile.add(jmiAddBook);
+       jmFile.add(jmiAddCategory);
+
+       jmiAddCategory.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               jIFAddCategory.setVisible(true);
+           }
+       });
+
+       jIFAddCategorycp = jIFAddCategory.getContentPane();
+       jIFAddCategorycp.setLayout(new BorderLayout(5,5));
+       jIFAddCategorycp.add(jsp1,BorderLayout.CENTER);
+       jIFAddCategory.setJMenuBar(jIFAddCatrgoryJmb);
+       jIFAddCategory.setBounds(0,0,500,500);
+       jIFAddCategory.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+       jIFAddCatrgoryJmb.add(jmDate);
+       jmDate.add(jmiDateLoad);
+       jmDate.add(jmiDateNew);
+       jmDate.add(jmiDateClose);
+       jmiDateLoad.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+                   try {
+                       File inFile = jfc.getSelectedFile();
+                       BufferedReader br = new BufferedReader(new FileReader(inFile));
+                       System.out.println("FileName: " + inFile.getName());
+                       String str = "";
+                       while ((str = br.readLine()) != null){
+                           jta.append(str + "\n");
+                       }
+                   }catch (Exception ioe){
+                       JOptionPane.showMessageDialog(null,"Open file error:"+ioe.toString());
+                   }
+               }
+           }
+       });
+
+
 
         jmb.add(jmFile);
         jmb.add(jmSet);
