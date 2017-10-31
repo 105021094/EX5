@@ -41,14 +41,15 @@ public class MainFrame extends JFrame {
     private Container jIFAddCategorycp;
     private JMenuBar jIFAddCatrgoryJmb = new JMenuBar();
     private JMenu jmDate = new JMenu("Date");
+    private JMenuItem jmiAddBook = new JMenuItem("Book");
+    private JMenuItem jmiAddCategory = new JMenuItem("Category");
     private JMenuItem jmiDateLoad = new JMenu("Load");
     private JMenuItem jmiDateNew = new JMenu("New");
     private JMenuItem jmiDateClose = new JMenu("Close");
     private JFileChooser jfc = new JFileChooser();
     private JTextArea jta = new JTextArea();
-    private JScrollPane jsp1 = new JScrollPane();
-    private JMenuItem jmiAddBook = new JMenuItem("Book");
-    private JMenuItem jmiAddCategory = new JMenuItem("Category");
+    private JScrollPane jsp1 = new JScrollPane(jta);
+
 
     private JInternalFrame jInternalFrame = new JInternalFrame();
     private Container jifCP;
@@ -71,6 +72,7 @@ public class MainFrame extends JFrame {
         //this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setJMenuBar(jmb);
         this.setContentPane(jdp);
+
 
  //20171031 Add Font-------------------------------------------------------------------------------------------------------------
 
@@ -137,6 +139,7 @@ public class MainFrame extends JFrame {
        jmDate.add(jmiDateLoad);
        jmDate.add(jmiDateNew);
        jmDate.add(jmiDateClose);
+       jdp.add(jIFAddCategory);
        jmiDateLoad.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
@@ -149,13 +152,19 @@ public class MainFrame extends JFrame {
                        while ((str = br.readLine()) != null){
                            jta.append(str + "\n");
                        }
+                       System.out.println("Read file finished!");
                    }catch (Exception ioe){
                        JOptionPane.showMessageDialog(null,"Open file error:"+ioe.toString());
                    }
                }
            }
        });
-
+        jmiDateClose.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jIFAddCategory.setVisible(false);
+            }
+        });
 
 
         jmb.add(jmFile);
