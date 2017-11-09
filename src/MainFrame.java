@@ -22,6 +22,7 @@ public class MainFrame extends JFrame {
     private JMenu jmAbout = new JMenu("About");
     private JMenuItem jmiExit = new JMenuItem("Exit");
     private JMenuItem jmiLoto = new JMenuItem("Loto");
+    private JMenuItem jMenuItemAddCategory = new JMenuItem("Add Category");
     private JDesktopPane jdp = new JDesktopPane();
 
 //20171031 Add Font-----------------------------------------------------------------------------------------------------
@@ -37,15 +38,13 @@ public class MainFrame extends JFrame {
     private JComboBox jcbFStyle = new JComboBox(options);
 
 //20171031 Add Category-------------------------------------------------------------------------------------------------
-    private JInternalFrame jIFAddCategory = new JInternalFrame();
-    private Container jIFAddCategorycp;
-    private JMenuBar jIFAddCatrgoryJmb = new JMenuBar();
-    private JMenu jmDate = new JMenu("Date");
-    private JMenuItem jmiAddBook = new JMenuItem("Book");
-    private JMenuItem jmiAddCategory = new JMenuItem("Category");
-    private JMenuItem jmiDateLoad = new JMenu("Load");
-    private JMenuItem jmiDateNew = new JMenu("New");
-    private JMenuItem jmiDateClose = new JMenu("Close");
+    private  JInternalFrame jIfAddCategory = new JInternalFrame();
+    private Container jIFAddCategoryCP;
+    private JMenuBar jIFAddCategoryJmb = new JMenuBar();
+    private JMenu jmData = new JMenu("Data");
+    private JMenuItem jmiDataLoad = new JMenuItem("Load");
+    private JMenuItem jmiDataNew = new JMenuItem("New");
+    private JMenuItem jmiDataClose = new JMenuItem("Close");
     private JFileChooser jfc = new JFileChooser();
     private JTextArea jta = new JTextArea();
     private JScrollPane jsp1 = new JScrollPane(jta);
@@ -119,50 +118,49 @@ public class MainFrame extends JFrame {
         });
 
 //20171031 Add Category-------------------------------------------------------------------------------------------------
-       jmFile.add(jmiAddBook);
-       jmFile.add(jmiAddCategory);
-
-       jmiAddCategory.addActionListener(new ActionListener() {
-           @Override
-           public void actionPerformed(ActionEvent e) {
-               jIFAddCategory.setVisible(true);
-           }
-       });
-
-       jIFAddCategorycp = jIFAddCategory.getContentPane();
-       jIFAddCategorycp.setLayout(new BorderLayout(5,5));
-       jIFAddCategorycp.add(jsp1,BorderLayout.CENTER);
-       jIFAddCategory.setJMenuBar(jIFAddCatrgoryJmb);
-       jIFAddCategory.setBounds(0,0,500,500);
-       jIFAddCategory.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-       jIFAddCatrgoryJmb.add(jmDate);
-       jmDate.add(jmiDateLoad);
-       jmDate.add(jmiDateNew);
-       jmDate.add(jmiDateClose);
-       jdp.add(jIFAddCategory);
-       jmiDateLoad.addActionListener(new ActionListener() {
-           @Override
-           public void actionPerformed(ActionEvent e) {
-               if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
-                   try {
-                       File inFile = jfc.getSelectedFile();
-                       BufferedReader br = new BufferedReader(new FileReader(inFile));
-                       System.out.println("FileName: " + inFile.getName());
-                       String str = "";
-                       while ((str = br.readLine()) != null){
-                           jta.append(str + "\n");
-                       }
-                       System.out.println("Read file finished!");
-                   }catch (Exception ioe){
-                       JOptionPane.showMessageDialog(null,"Open file error:"+ioe.toString());
-                   }
-               }
-           }
-       });
-        jmiDateClose.addActionListener(new ActionListener() {
+        jMenuItemAddCategory.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                jIFAddCategory.setVisible(false);
+                jIfAddCategory.setVisible(true);
+            }
+        });
+        jIFAddCategoryCP = jIfAddCategory.getContentPane();
+        jIFAddCategoryCP.setLayout(new BorderLayout(5,5));
+        jIFAddCategoryCP.add(jsp1,BorderLayout.CENTER);
+        jIfAddCategory.setJMenuBar(jIFAddCategoryJmb);
+        jIfAddCategory.setBounds(0,0,500,500);
+        jIfAddCategory.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        jIFAddCategoryJmb.add(jmData);
+        jIFAddCategoryJmb.add(jmiDataLoad);
+        jIFAddCategoryJmb.add(jmiDataNew);
+        jIFAddCategoryJmb.add(jmiDataClose);
+        jdp.add(jIfAddCategory);
+        jmiDataLoad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+                    try{
+                        File inFile = jfc.getSelectedFile();
+                        BufferedReader br = new BufferedReader(new FileReader(inFile));
+                        System.out.println("File Name:"+ inFile.getName());
+                        String str = "";
+                        while ((str = br.readLine()) !=null){
+                            jta.append(str + "\n");
+                        }
+                        System.out.println("Read file finished");
+                    }catch (Exception ioe){
+                        JOptionPane.showMessageDialog(null,"Open file error:"+ioe.toString());
+                    }
+                }
+            }
+        });
+
+
+
+        jmiDataClose.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
             }
         });
 
@@ -173,6 +171,7 @@ public class MainFrame extends JFrame {
         jmb.add(jmAbout);
         jmFile.add(jmiExit);
         jmFile.add(jmiLoto);
+        jmFile.add(jMenuItemAddCategory);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -180,7 +179,6 @@ public class MainFrame extends JFrame {
                 loginFrm.setVisible(true);
             }
         });
-
 
         jInternalFrame.setBounds(0,0,300,80);
         jifCP = jInternalFrame.getContentPane();
@@ -196,6 +194,7 @@ public class MainFrame extends JFrame {
             jlbs[i].setHorizontalAlignment(JLabel.CENTER);
             jpn.add(jlbs[i]);
         }
+
         lotoGenerate();
         jbtnRegen.addActionListener(new ActionListener() {
             @Override
